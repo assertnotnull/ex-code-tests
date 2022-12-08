@@ -1,0 +1,70 @@
+# tic-tac-toe
+
+## Section
+
+```elixir
+defmodule Tictactoe do
+  def evaluate(line) do
+    cells =
+      Regex.scan(~r/./, line)
+      |> List.flatten()
+
+    rows = Enum.chunk_every(cells, 3)
+    cols = Enum.zip(rows)
+  end
+
+  def check_line_winner(line) do
+    [lead | _] = line
+
+    if Enum.all?(row, fn cell -> cell == lead end) do
+      {:winner, lead}
+    else
+      {:no_winner, nil}
+    end
+  end
+end
+```
+
+```elixir
+row = "xxx"
+matches = Regex.named_captures(~r/(?<x>x{3})|(?<o>o{3})/, row)
+
+if !is_nil(matches) do
+  [{key, _val}] =
+    matches
+    |> Map.filter(fn {_key, val} -> String.length(val) === 3 end)
+    |> Map.to_list()
+
+  {:winner, key}
+else
+  {:no_winner, nil}
+end
+
+# case result_row do
+#   %{key => _val} -> key
+#   _ -> false
+# end
+```
+
+```elixir
+row = ["x", "x", "x"]
+[lead | _] = row
+
+if Enum.all?(row, fn cell -> cell == lead end) do
+  {:winner, lead}
+else
+  {:no_winner, nil}
+end
+```
+
+```elixir
+game = "xoxooxoox"
+
+cells =
+  Regex.scan(~r/./, game)
+  |> List.flatten()
+
+rows = Enum.chunk_every(cells, 3)
+cols = Enum.zip(rows)
+# |> Enum.any?(fn row -> Regex.match?(~r/x{3}|o{3}/, row) end)
+```
